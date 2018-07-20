@@ -1,6 +1,9 @@
 [package]
 name = "icfp-2018"
 version = "0.1.0"
-authors = ["aziis98 <antonio.delucreziis@gmail.com>"]
+authors = [
+"aziis98 <antonio.delucreziis@gmail.com>",
+"elvilio <elvilio98@gmail.com>"
+]
 
 [dependencies]
