@@ -178,14 +178,25 @@ impl Matrix {
 	}
 
 	pub fn get_voxel(&self, c: Coordinate) -> bool {
-		let index = (c.x as u32) * (self.resolution as u32) * (self.resolution as u32) 
-						+ (c.y as u32) * (self.resolution as u32) 
-						+ (c.z as u32);
+		let res = self.resolution as u32;
+		let index = (c.x as u32) * res * res + (c.y as u32) * res + (c.z as u32);
 
 		let byte_index = index / 8;
-		let bit_index = index % 8;
+		let bit_index = (index % 8) as u8;
 
-		(self.voxels[byte_index as usize] >> (7 - bit_index)) & 1u8 == 1
+		let voxel_word = self.voxels[byte_index as usize];
+
+		(voxel_word >> bit_index) & 1 != 0
+	}
+
+	pub fn count_filled(&self) -> u32 {
+		let mut acc = 0u32;
+
+		for mut voxel_byte in &self.voxels {
+			acc += voxel_byte.count_ones();
+		}
+
+		acc
 	}
 
 	pub fn is_grounded(&self, c: Coordinate) -> bool {
