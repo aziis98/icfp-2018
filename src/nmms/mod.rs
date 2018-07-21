@@ -25,6 +25,37 @@ impl CoordinateDifference {
 	}
 }
 
+impl CoordinateDifference {
+    pub fn is_ld(&self) -> bool {
+        if self.dx == 0 && self.dy == 0 && self.dz != 0 {
+            return true;
+        }
+        else if self.dx == 0 && self.dy != 0 && self.dz == 0 {
+            return true
+        }
+        else if self.dx != 0 && self.dy == 0 && self.dz == 0 {
+            return true
+        }
+        else { false }
+    }
+
+    pub fn is_sld(&self) -> bool {
+        if self.is_ld() {
+            if self.clen() < 5 { return true }
+            else { return false }
+        }
+        else { false }
+    }
+
+    pub fn is_lld(&self) -> bool {
+        if self.is_ld() {
+            if self.clen() < 15 && self.clen() > 5 { return true }
+                else { return false }
+        }
+            else { false }
+    }
+}
+
 impl Sub for Coordinate {
 	type Output = CoordinateDifference;
 
