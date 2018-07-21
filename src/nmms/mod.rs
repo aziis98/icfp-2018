@@ -103,7 +103,7 @@ impl CoordinateDifference {
 
 	pub fn is_lld(&self) -> bool {
 		if self.is_ld() {
-			if self.clen() < 15 && self.clen() > 5 {
+			if self.clen() < 15 {
 				return true;
 			} else {
 				return false;
@@ -188,11 +188,10 @@ impl Matrix {
 	}
 
 	pub fn is_grounded(&self, c: Coordinate) -> bool {
+        unimplemented!();
+    }
 
-		fn is_grounded_trail(m: &Matrix, c: Coordinate, tail: Vec<Coordinate>) {
-			unimplemented!();
-		}
-
-		unimplemented!();
-	}
+    pub fn is_empty(&self) -> bool {
+        unimplemented!();
+    }
 }
