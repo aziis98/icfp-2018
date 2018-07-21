@@ -15,13 +15,21 @@ pub struct CoordinateDifference {
 	pub dz: i16
 }
 
-impl CoordinateDifference {
-	pub fn mlen(&self) -> u16 {
-		(self.dx.abs() + self.dz.abs() + self.dz.abs()) as u16
-	}
+#[derive(Debug, Copy, Clone)]
+pub struct Region {
+	pub c1: Coordinate,
+	pub c2: Coordinate
+}
 
-	pub fn clen(&self) -> u16 {
-		self.dx.abs().max(self.dy.abs()).max(self.dz.abs()) as u16
+impl Add<CoordinateDifference> for Coordinate {
+	type Output = Coordinate;
+
+	fn add(self, d: CoordinateDifference) -> Coordinate {
+		Coordinate {
+			x: (self.x as i16 + d.dx) as u8,
+			y: (self.y as i16 + d.dy) as u8,
+			z: (self.z as i16 + d.dz) as u8,
+		}
 	}
 }
 
@@ -61,21 +69,27 @@ impl Sub for Coordinate {
 
 	fn sub(self, other: Coordinate) -> CoordinateDifference {
 		CoordinateDifference {
-			dx: other.x as i16 - self.x as i16,
-			dy: other.y as i16 - self.y as i16,
-			dz: other.z as i16 - self.z as i16,
+			dx: self.x as i16 - other.x as i16,
+			dy: self.y as i16 - other.y as i16,
+			dz: self.z as i16 - other.z as i16,
 		}
 	}
 }
 
-impl Add<CoordinateDifference> for Coordinate {
-	type Output = Coordinate;
+impl Coordinate {
+	
+	pub fn is_adjacent(self, other: Coordinate) -> bool {
+		(self - other).mlen() == 1
+	}
+	
+}
 
-	fn add(self, d: CoordinateDifference) -> Coordinate {
-		Coordinate {
-			x: (self.x as i16 + d.dx) as u8,
-			y: (self.y as i16 + d.dy) as u8,
-			z: (self.z as i16 + d.dz) as u8,
-		}
+impl CoordinateDifference {
+	pub fn mlen(&self) -> u16 {
+		(self.dx.abs() + self.dz.abs() + self.dz.abs()) as u16
+	}
+
+	pub fn clen(&self) -> u16 {
+		self.dx.abs().max(self.dy.abs()).max(self.dz.abs()) as u16
 	}
 }
