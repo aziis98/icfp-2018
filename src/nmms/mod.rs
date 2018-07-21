@@ -21,7 +21,7 @@ pub struct Region {
 	pub c2: Coordinate
 }
 
-impl Add<CoordinateDifference> for Coordinate {
+impl Add<CoordinateDifference> for Coordinate { // adds coordinate and a difference
 	type Output = Coordinate;
 
 	fn add(self, d: CoordinateDifference) -> Coordinate {
@@ -33,38 +33,7 @@ impl Add<CoordinateDifference> for Coordinate {
 	}
 }
 
-impl CoordinateDifference {
-    pub fn is_ld(&self) -> bool {
-        if self.dx == 0 && self.dy == 0 && self.dz != 0 {
-            return true;
-        }
-        else if self.dx == 0 && self.dy != 0 && self.dz == 0 {
-            return true
-        }
-        else if self.dx != 0 && self.dy == 0 && self.dz == 0 {
-            return true
-        }
-        else { false }
-    }
-
-    pub fn is_sld(&self) -> bool {
-        if self.is_ld() {
-            if self.clen() < 5 { return true }
-            else { return false }
-        }
-        else { false }
-    }
-
-    pub fn is_lld(&self) -> bool {
-        if self.is_ld() {
-            if self.clen() < 15 && self.clen() > 5 { return true }
-                else { return false }
-        }
-            else { false }
-    }
-}
-
-impl Sub for Coordinate {
+impl Sub for Coordinate { // subtracts 2 coordinates
 	type Output = CoordinateDifference;
 
 	fn sub(self, other: Coordinate) -> CoordinateDifference {
@@ -92,4 +61,42 @@ impl CoordinateDifference {
 	pub fn clen(&self) -> u16 {
 		self.dx.abs().max(self.dy.abs()).max(self.dz.abs()) as u16
 	}
+
+    pub fn is_ld(&self) -> bool {
+        if self.dx == 0 && self.dy == 0 && self.dz != 0 {
+            return true;
+        }
+            else if self.dx == 0 && self.dy != 0 && self.dz == 0 {
+                return true
+            }
+                else if self.dx != 0 && self.dy == 0 && self.dz == 0 {
+                    return true
+                }
+                    else { false }
+    }
+
+    pub fn is_sld(&self) -> bool {
+        if self.is_ld() {
+            if self.clen() < 5 { return true }
+                else { return false }
+        }
+            else { false }
+    }
+
+    pub fn is_lld(&self) -> bool {
+        if self.is_ld() {
+            if self.clen() < 15 && self.clen() > 5 { return true }
+                else { return false }
+        }
+            else { false }
+    }
+
+    pub fn is_nd(&self) -> bool {
+        if self.mlen() <= 2 && self.clen() == 1 {
+                return true
+        } else {
+                return false
+            }
+        }
+    }
 }
