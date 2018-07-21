@@ -1,6 +1,6 @@
 use std::ops::*;
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Hash, Eq, PartialEq, Debug, Copy, Clone)]
 pub struct Coordinate {
 	pub x: u8,
 	pub y: u8,
@@ -199,8 +199,29 @@ impl Matrix {
 		acc
 	}
 
+	/// Questa funzione se un voxel è _grounded_, al massimo questa operazione
+	/// richiede {numero di voxel pieni nel modello} passi o al meglio `y` se è direttamente in linea con
+	/// il terreno.
 	pub fn is_grounded(&self, c: Coordinate) -> bool {
-        unimplemented!();
+
+		use std::collections::HashSet;
+
+		let mut tail: HashSet<Coordinate> = HashSet::new();
+
+		let mut is_grounded_tail = |c: Coordinate| -> bool {
+			if tail.contains(&c) {
+				false
+			}
+			else {
+				tail.insert(c);
+
+				c.y == 0 || (
+					is_grounded_tail(c + [0, 0, 0])
+				)
+			}
+		};
+
+        is_grounded_tail(c)
     }
 
     pub fn is_empty(&self, r: Region) -> bool {
