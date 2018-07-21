@@ -1,3 +1,6 @@
+
+#![allow(dead_code)]
+
 use std::ops::*;
 
 #[derive(Hash, Eq, PartialEq, Debug, Copy, Clone)]
@@ -153,6 +156,7 @@ pub struct Matrix {
 }
 
 impl Matrix {
+
 	pub fn from_file(path: &str) -> Matrix {
 		use std::fs;
 
@@ -161,7 +165,10 @@ impl Matrix {
 		let resolution = data.remove(0);
 		let voxels = data;
 
-		Matrix { resolution, voxels }
+		Matrix { 
+			resolution,
+			voxels
+		}
 	}
 
 	pub fn new(resolution: u8) -> Matrix {
@@ -219,14 +226,19 @@ impl Matrix {
 			}
 		}
 
-		let r = is_grounded_tail(self, &mut tail, c);
-
-		println!("{}", tail.len());
-
-		r
+		is_grounded_tail(self, &mut tail, c)
 	}
-
+	
 	pub fn is_empty(&self, r: Region) -> bool {
-		unimplemented!();
+		for x in r.c1.x ..= r.c2.x  {
+			for y in r.c1.y ..= r.c2.y  {
+				for z in r.c1.z ..= r.c2.z  {
+					if self.get_voxel(Coordinate::new(x, y, z)) {
+						return false;
+					}
+				}	
+			}	
+		}
+		return true;
 	}
 }
