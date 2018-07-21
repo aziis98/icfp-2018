@@ -147,12 +147,26 @@ impl Region {
 }
 
 #[derive(Debug, Clone)]
-struct Matrix {
-	resolution: u8,
-	voxels: Vec<u8>
+pub struct Matrix {
+	pub resolution: u8,
+	pub voxels: Vec<u8>
 }
 
 impl Matrix {
+
+	pub fn from_file(path: &str) -> Matrix {
+		use std::fs;
+
+		let mut data = fs::read(path).expect("Unable to read file");
+
+		let resolution = data.remove(0);
+		let voxels = data;
+
+		Matrix {
+			resolution,
+			voxels
+		}
+	}
 
 	pub fn new(resolution: u8) -> Matrix {
 		let byte_count = (resolution as u32).pow(3) / 8;
@@ -164,7 +178,13 @@ impl Matrix {
 	}
 
 	pub fn get_voxel(&self, c: Coordinate) -> bool {
-		unimplemented!();
+		let index = (c.x as u32) * (self.resolution as u32) * (self.resolution as u32) 
+						+ (c.y as u32) * (self.resolution as u32) 
+						+ (c.z as u32);
+		let byte_index = index / 8;
+		let bit_index = index % 8;
+
+		self.voxels[byte_index as usize] & (1u8 << bit_index) == 1
 	}
 
 	pub fn is_grounded(&self, c: Coordinate) -> bool {
