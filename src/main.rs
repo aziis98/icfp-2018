@@ -5,19 +5,19 @@ fn main() {
 
     println!("resolution: {}", m.resolution);
 
+    let mut model = String::new();
+
     for y in (0..20).rev() {
         for x in 0..20 {
             if m.get_voxel(nmms::Coordinate::new(x, y, 8)) {
-                print!("#");
+                model.push('#');
             } else {
-                print!(" ");
+                model.push(' ');
             }
         }
-        print!("\n");
+        model.push('\n');
     }
 
-    for _ in 0 .. m.resolution {
-        print!("-");
-    }
-    println!("\n");
+    println!("");
+    println!("{}", model);
 }

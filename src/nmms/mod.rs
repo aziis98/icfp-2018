@@ -181,17 +181,18 @@ impl Matrix {
 		let index = (c.x as u32) * (self.resolution as u32) * (self.resolution as u32) 
 						+ (c.y as u32) * (self.resolution as u32) 
 						+ (c.z as u32);
+
 		let byte_index = index / 8;
 		let bit_index = index % 8;
 
-		self.voxels[byte_index as usize] & (1u8 << bit_index) == 1
+		(self.voxels[byte_index as usize] >> (7 - bit_index)) & 1u8 == 1
 	}
 
 	pub fn is_grounded(&self, c: Coordinate) -> bool {
         unimplemented!();
     }
 
-    pub fn is_empty(&self) -> bool {
+    pub fn is_empty(&self, r: Region) -> bool {
         unimplemented!();
     }
 }
