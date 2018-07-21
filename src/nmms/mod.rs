@@ -92,9 +92,11 @@ impl CoordinateDifference {
 		}
 	}
 
+	/// ld is a **short linear coordinate difference** (notated sld)
+	/// if mlen(ld) ≤ 5
 	pub fn is_sld(&self) -> bool {
 		if self.is_ld() {
-			if self.clen() < 5 {
+			if self.mlen() <= 5 {
 				return true;
 			} else {
 				return false;
@@ -104,9 +106,11 @@ impl CoordinateDifference {
 		}
 	}
 
+	/// ld is a **long linear coordinate difference** (notated lld)
+	/// if mlen(ld) ≤ 15
 	pub fn is_lld(&self) -> bool {
 		if self.is_ld() {
-			if self.clen() < 15 {
+			if self.mlen() <= 15 {
 				return true;
 			} else {
 				return false;
@@ -116,6 +120,8 @@ impl CoordinateDifference {
 		}
 	}
 
+	/// d is a **near coordinate difference** (notated nd) if 
+	/// 0 < mlen(d) ≤ 2 and clen(d) = 1
 	pub fn is_nd(&self) -> bool {
 		if self.mlen() <= 2 && self.clen() == 1 {
 			return true;
@@ -228,7 +234,7 @@ impl Matrix {
 
 		is_grounded_tail(self, &mut tail, c)
 	}
-	
+
 	pub fn is_empty(&self, r: Region) -> bool {
 		for x in r.c1.x ..= r.c2.x  {
 			for y in r.c1.y ..= r.c2.y  {
