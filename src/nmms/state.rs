@@ -1,14 +1,17 @@
-#[derive(Debug, Copy, Clone)]
-pub struct Trace {
-    pub commands: [Command],
+
+use nmms::Matrix;
+use nmms::bot::Bot;
+use nmms::bot::commands::Command;
+
+pub struct Trace<'a> {
+    pub commands: Vec<&'a Command>,
     pub time: i64 // A cosa serve? Per tenere conto delle step fatte? Nel caso non starebbe meglio nello State?
 }
 
-#[derive(Debug, Copy, Clone)]
-pub struct State {
+pub struct State<'a> {
     pub energy: u64,
     pub harmonics: bool,
     pub matrix: Matrix,
-    pub bots: [Bot], // Non sarebbe meglio un Vec<Box>?
-    pub trace: Trace
+    pub bots: Vec<Bot>,
+    pub trace: Trace<'a>
 }

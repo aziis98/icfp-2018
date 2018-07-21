@@ -1,14 +1,12 @@
-mod nmms;
-
-use nmms::*;
+pub mod nmms;
 
 fn main() {
-    let m = Matrix::from_file("./problemsL/LA059_tgt.mdl");
-
-    println!("resolution: {}", m.resolution);
-    println!("filled: {}", m.count_filled());
-
-    println!("{}", m.is_grounded(Coordinate::new(2, 25, 25)))
+    
+    // let s = nmms::state::State {
+    //     energy: 0,
+    //     harmonics: false,
+    //     matrix: nmms::Matrix::new(20)
+    // };
 
     // let mut model = String::new();
 

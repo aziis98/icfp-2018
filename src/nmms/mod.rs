@@ -3,6 +3,9 @@
 
 use std::ops::*;
 
+pub mod state;
+pub mod bot;
+
 #[derive(Hash, Eq, PartialEq, Debug, Copy, Clone)]
 pub struct Coordinate {
 	pub x: u8,
