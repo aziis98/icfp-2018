@@ -56,6 +56,18 @@ impl Coordinate {
 	}
 }
 
+impl Add<[i16; 3]> for Coordinate {
+	type Output = Coordinate;
+
+	fn add(self, vec3: [i16; 3]) -> Coordinate {
+		Coordinate::new(
+			(self.x as i16 + vec3[0]) as u8,
+			(self.y as i16 + vec3[1]) as u8,
+			(self.z as i16 + vec3[2]) as u8,
+		)
+	}
+}
+
 impl CoordinateDifference {
 	pub fn mlen(&self) -> u16 {
 		(self.dx.abs() + self.dz.abs() + self.dz.abs()) as u16
@@ -131,5 +143,36 @@ impl Region {
 		(if self.c1.x == self.c2.x { 0 } else { 1 })
 			+ (if self.c1.y == self.c2.y { 0 } else { 1 })
 			+ (if self.c1.z == self.c2.z { 0 } else { 1 })
+	}
+}
+
+#[derive(Debug, Clone)]
+struct Matrix {
+	resolution: u8,
+	voxels: Vec<u8>
+}
+
+impl Matrix {
+
+	pub fn new(resolution: u8) -> Matrix {
+		let byte_count = (resolution as u32).pow(3) / 8;
+
+		Matrix {
+			resolution,
+			voxels: vec![0; byte_count as usize]
+		}
+	}
+
+	pub fn get_voxel(&self, c: Coordinate) -> bool {
+		unimplemented!();
+	}
+
+	pub fn is_grounded(&self, c: Coordinate) -> bool {
+
+		fn is_grounded_trail(m: &Matrix, c: Coordinate, tail: Vec<Coordinate>) {
+			unimplemented!();
+		}
+
+		unimplemented!();
 	}
 }
