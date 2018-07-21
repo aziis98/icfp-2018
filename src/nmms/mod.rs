@@ -103,7 +103,7 @@ impl CoordinateDifference {
 
 	pub fn is_lld(&self) -> bool {
 		if self.is_ld() {
-			if self.clen() < 15 && self.clen() > 5 {
+			if self.clen() < 15 {
 				return true;
 			} else {
 				return false;

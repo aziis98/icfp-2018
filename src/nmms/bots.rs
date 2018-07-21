@@ -59,10 +59,43 @@ pub struct SMove { // straight move
     lld: CoordinateDifference
 }
 impl Command for SMove {
-    fn execute(&self, state: State)-> State{
+    fn execute(&self, state: State) -> State {
         if lld.is_lld() {
             let c: CoordinateDifference = bot.pos + lld;
-
+            // da fare := creo matrice da punto bot.pos a c e controllo che sia completamente vuota
+            // let testing = Matrix::new()
+            // if testing.is_empty {
+            //  buono --> voglio spostare il bot
+            //  state.energy += 2*lld.mlen()
+            //  bot.pos = c
+            // } else {
+            //  panic!("non è completamente vuota la roba che stai cercando di attraversare!!!!!")
+            // }
         }
+        state
+    }
+}
+
+
+pub struct LMove {
+    bot: Bot,
+    sld1: CoordinateDifference,
+    sld2: CoordinateDifference
+}
+impl Command for LMove {
+    fn execute(&self, state: State) -> State {
+        if !(sld1.is_sld() || sld2.is_sld()) {
+            panic!("una delle tue variabili non è un short linear coordinate difference");
+        }
+        let c1 = bot.pos + sld1;
+        let c2 = c1 + sld2;
+
+        // da fare controllare che le matrici c->c1 e c1->c2 siano completamente vuote
+        // controllare che c1 e c2 siano dentro la mesh
+
+        bot.pos = c2;
+        state.energy += 2*sld1.mlen() + 2 + sld2.mlen();
+
+        state
     }
 }
