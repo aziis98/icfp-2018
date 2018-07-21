@@ -1,5 +1,5 @@
 
-use std::ops::Add;
+use std::ops::*;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Coordinate {
@@ -13,6 +13,28 @@ pub struct CoordinateDifference {
 	pub dx: i16,
 	pub dy: i16,
 	pub dz: i16
+}
+
+impl CoordinateDifference {
+	pub fn mlen(&self) -> u16 {
+		(self.dx.abs() + self.dz.abs() + self.dz.abs()) as u16
+	}
+
+	pub fn clen(&self) -> u16 {
+		self.dx.abs().max(self.dy.abs()).max(self.dz.abs()) as u16
+	}
+}
+
+impl Sub for Coordinate {
+	type Output = CoordinateDifference;
+
+	fn sub(self, other: Coordinate) -> CoordinateDifference {
+		CoordinateDifference {
+			dx: other.x as i16 - self.x as i16,
+			dy: other.y as i16 - self.y as i16,
+			dz: other.z as i16 - self.z as i16,
+		}
+	}
 }
 
 impl Add<CoordinateDifference> for Coordinate {
