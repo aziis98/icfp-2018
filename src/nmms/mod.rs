@@ -149,11 +149,10 @@ impl Region {
 #[derive(Debug, Clone)]
 pub struct Matrix {
 	pub resolution: u8,
-	pub voxels: Vec<u8>
+	pub voxels: Vec<u8>,
 }
 
 impl Matrix {
-
 	pub fn from_file(path: &str) -> Matrix {
 		use std::fs;
 
@@ -162,10 +161,7 @@ impl Matrix {
 		let resolution = data.remove(0);
 		let voxels = data;
 
-		Matrix {
-			resolution,
-			voxels
-		}
+		Matrix { resolution, voxels }
 	}
 
 	pub fn new(resolution: u8) -> Matrix {
@@ -173,7 +169,7 @@ impl Matrix {
 
 		Matrix {
 			resolution,
-			voxels: vec![0; byte_count as usize]
+			voxels: vec![0; byte_count as usize],
 		}
 	}
 
@@ -203,28 +199,34 @@ impl Matrix {
 	/// richiede {numero di voxel pieni nel modello} passi o al meglio `y` se è direttamente in linea con
 	/// il terreno.
 	pub fn is_grounded(&self, c: Coordinate) -> bool {
-
 		use std::collections::HashSet;
 
 		let mut tail: HashSet<Coordinate> = HashSet::new();
 
-		let mut is_grounded_tail = |c: Coordinate| -> bool {
-			if tail.contains(&c) {
+		fn is_grounded_tail(m: &Matrix, tail: &mut HashSet<Coordinate>, c: Coordinate) -> bool {
+			if tail.contains(&c) || !m.get_voxel(c) {
 				false
-			}
-			else {
+			} else {
 				tail.insert(c);
 
-				c.y == 0 || (
-					is_grounded_tail(c + [0, 0, 0])
-				)
+				c.y == 0
+					|| is_grounded_tail(m, tail, c + [0, -1, 0])
+					|| is_grounded_tail(m, tail, c + [-1, 0, 0])
+					|| is_grounded_tail(m, tail, c + [1, 0, 0])
+					|| is_grounded_tail(m, tail, c + [0, 0, -1])
+					|| is_grounded_tail(m, tail, c + [0, 0, 1])
+					|| is_grounded_tail(m, tail, c + [0, 1, 0])
 			}
-		};
+		}
 
-        is_grounded_tail(c)
-    }
+		let r = is_grounded_tail(self, &mut tail, c);
 
-    pub fn is_empty(&self, r: Region) -> bool {
-        unimplemented!();
-    }
+		println!("{}", tail.len());
+
+		r
+	}
+
+	pub fn is_empty(&self, r: Region) -> bool {
+		unimplemented!();
+	}
 }
