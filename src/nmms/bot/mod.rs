@@ -3,9 +3,12 @@ use nmms::Coordinate;
 
 pub mod commands;
 
-#[derive(Debug)]
+pub type BID = u32;
+
+#[derive(Debug, Clone)]
 pub struct Bot {
-    pub bid: i32,
+    pub bid: BID,
     pub pos: Coordinate,
-    pub seeds: Vec<i32> // Non sarebbe meglio un Vec<i32> ?
+    pub seeds: Vec<BID> // Questo è ok anche Vec, non serve che sia altro
 }
+

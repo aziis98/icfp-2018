@@ -126,12 +126,16 @@ impl CoordinateDifference {
 	/// d is a **near coordinate difference** (notated nd) if 
 	/// 0 < mlen(d) ≤ 2 and clen(d) = 1
 	pub fn is_nd(&self) -> bool {
-		if self.mlen() <= 2 && self.clen() == 1 {
-			return true;
-		} else {
-			return false;
-		}
+		let mlen = self.mlen();
+		0 < mlen && mlen <= 2 && self.clen() == 1
 	}
+
+	/// d is a far coordinate difference (notated fd) 
+	/// if 0 < clen(d) ≤ 30
+	pub fn is_fd(&self) -> bool {
+		let clen = self.clen();
+		0 < clen && clen <= 30
+	}	
 }
 
 impl Region {
@@ -199,6 +203,21 @@ impl Matrix {
 		let voxel_word = self.voxels[byte_index as usize];
 
 		(voxel_word >> bit_index) & 1 != 0
+	}
+
+	pub fn set_voxel(&mut self, c: Coordinate, new_state: bool) {
+		let res = self.resolution as u32;
+		let index = (c.x as u32) * res * res + (c.y as u32) * res + (c.z as u32);
+
+		let byte_index = index / 8;
+		let bit_index = (index % 8) as u8;
+
+		if new_state {
+			self.voxels[byte_index as usize] |= 1 << bit_index;
+		}
+		else {
+			self.voxels[byte_index as usize] &= !(1 << bit_index);
+		}
 	}
 
 	pub fn count_filled(&self) -> u32 {
