@@ -1,6 +1,4 @@
-
 #![allow(dead_code)]
-
 use std::ops::*;
 
 pub mod state;
